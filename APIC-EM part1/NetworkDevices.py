@@ -9,22 +9,25 @@ def GetNetworkDevices(aTicket,url,aData=None):
     i=0
     for item in devices:
         i+=1
-        device_list.append ([i ,item["hostname"],item["type"],item["managementIpAddress"],item["softwareVersion"]])
-        print (tabulate(device_list, headers=["number","hostname","type","ip","softwareVersion"],tablefmt ="rst"))
+        device_list.append ([i ,item["hostname"],item["type"],item["managementIpAddress"],item["softwareVersion"],item["instanceUuid"]])
+        print (tabulate(device_list, headers=["number","hostname","type","ip","softwareVersion","instanceUuid"],tablefmt ="rst"))
     return device_list
+    
 def ASK_USER_INPUT(aDevice_list):
     user_input=int(input("Введите номер для получения конфигурации: "))
     if user_input in range (1,len(aDevice_list)+1):
-        id = aDevice_list[user_input-1]
+        id = aDevice_list[user_input-1][5]
+        print (id)
         return id
 def GetConfiguration(aTicket,url,aData=None):
     header = {"X-Auth-Token":aTicket,"content-type":"application/json"}
-    requestdevices=requests.get(url,data=None,headers=header,verify=False)
-    request_json=requestdevices.json()
+    requestdeviceconfig=requests.get(url,data=None,headers=header,verify=False)
+    request_json=requestdeviceconfig.json()
+
     print (request_json["response"].replace("\r\n","\n"))
 def main():
     ticket = GetServiceTicket()
-    device_list =GetNetworkDevices (ticket, "https://"+ControllerIP+"/api/v1/network-device")
+    device_list=GetNetworkDevices (ticket, "https://"+ControllerIP+"/api/v1/network-device")
     id = ASK_USER_INPUT(device_list)
-    GetConfiguration(ticket,"https://"+ControllerIP+"/api/v1/network-device"+id+"/config")
+    GetConfiguration(ticket,"https://"+ControllerIP+"/api/v1/network-device/"+id+"/config")
 main()

@@ -53,6 +53,7 @@ while True:
     if user_input.isdigit():
         if int(user_input) in range(1,len(device_list)+1):
             id = device_list[int(user_input)-1][device_id_idx]
+            print (id)
             break
         else:
             print ("Oops! number is out of range, please try again or enter 'exit'")
