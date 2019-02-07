@@ -10,15 +10,16 @@ def GetNetworkDevices(aTicket,url,aData=None):
     for item in devices:
         i+=1
         device_list.append ([i ,item["hostname"],item["type"],item["managementIpAddress"],item["softwareVersion"],item["instanceUuid"]])
-        print (tabulate(device_list, headers=["number","hostname","type","ip","softwareVersion","instanceUuid"],tablefmt ="rst"))
+        
+    print (tabulate(device_list, headers=["number","hostname","type","ip","softwareVersion","instanceUuid"],tablefmt ="rst"))
     return device_list
     
 def ASK_USER_INPUT(aDevice_list):
     user_input=int(input("Введите номер для получения конфигурации: "))
     if user_input in range (1,len(aDevice_list)+1):
         id = aDevice_list[user_input-1][5]
-        print (id)
         return id
+        
 def GetConfiguration(aTicket,url,aData=None):
     header = {"X-Auth-Token":aTicket,"content-type":"application/json"}
     requestdeviceconfig=requests.get(url,data=None,headers=header,verify=False)
