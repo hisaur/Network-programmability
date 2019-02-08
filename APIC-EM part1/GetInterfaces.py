@@ -45,6 +45,7 @@ def GetNetworkInterfacesRouter(aTicket,url):
     for item in interfaces:
         i+=1
         interface_list.append ([i,item["portName"],item["duplex"],item["speed"],item["adminStatus"],item["ipv4Address"],item["ipv4Mask"]])
+    interface_list = interface_list.sort
     print (tabulate(interface_list, headers=["PortName","duplex","speed","adminStatus","ipv4Address","ipv4Mask"]))
     
 def GetConfiguration(aTicket,url,aData=None):
@@ -67,6 +68,8 @@ def main():
         if "Switch" in TypeofaDevice:
             GetNetworkInterfacesSwitch(ticket,"https://"+ControllerIP+"/api/v1/interface/network-device/"+id)
         elif "Router" in TypeofaDevice:
+            GetNetworkInterfacesRouter(ticket,"https://"+ControllerIP+"/api/v1/interface/network-device/"+id)
+        else:
             GetNetworkInterfacesRouter(ticket,"https://"+ControllerIP+"/api/v1/interface/network-device/"+id)
     else:
         print ("Неправильная команда")

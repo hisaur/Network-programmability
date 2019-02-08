@@ -16,6 +16,7 @@ def get_host():
     try:
         resp = get(api="host") # The get() function is the simplified version for "get" function in requests module, defined in apicem.py
         response_json = resp.json() # Get the json-encoded content from response
+        print (response_json["response"])
         print ("Status: ",resp.status_code)  # This is the http request status
     except:
         print ("Something wrong with GET /host request!")
