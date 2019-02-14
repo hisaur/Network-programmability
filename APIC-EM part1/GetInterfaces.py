@@ -35,6 +35,8 @@ def GetNetworkInterfacesSwitch(aTicket,url):
         i+=1
         interface_list.append ([i,item["portName"],item["duplex"],item["speed"],item["adminStatus"],item["vlanId"]])
     print (tabulate(interface_list, headers=["PortName","duplex","speed","adminStatus","vlanID"]))
+    print (interface_list)
+    print (interfaces)
 def GetNetworkInterfacesRouter(aTicket,url):
     header = {"X-Auth-Token":aTicket,"content-type":"application/json"}
     requestinterfaces=requests.get(url,data=None,headers=header,verify=False)
@@ -47,6 +49,7 @@ def GetNetworkInterfacesRouter(aTicket,url):
         interface_list.append ([i,item["portName"],item["duplex"],item["speed"],item["adminStatus"],item["ipv4Address"],item["ipv4Mask"]])
     interface_list = interface_list.sort
     print (tabulate(interface_list, headers=["PortName","duplex","speed","adminStatus","ipv4Address","ipv4Mask"]))
+    
     
 def GetConfiguration(aTicket,url,aData=None):
     header = {"X-Auth-Token":aTicket,"content-type":"application/json"}
