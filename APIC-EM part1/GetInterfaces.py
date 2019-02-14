@@ -10,7 +10,6 @@ def GetNetworkDevices(aTicket,url,aData=None):
     for item in devices:
         i+=1
         device_list.append ([i ,item["hostname"],item["type"],item["managementIpAddress"],item["softwareVersion"],item["instanceUuid"]])
-        
     print (tabulate(device_list, headers=["number","hostname","type","ip","softwareVersion","instanceUuid"],tablefmt ="rst"))
     return device_list
     
@@ -35,8 +34,7 @@ def GetNetworkInterfacesSwitch(aTicket,url):
         i+=1
         interface_list.append ([i,item["portName"],item["duplex"],item["speed"],item["adminStatus"],item["vlanId"]])
     print (tabulate(interface_list, headers=["PortName","duplex","speed","adminStatus","vlanID"]))
-    print (interface_list)
-    print (interfaces)
+    
 def GetNetworkInterfacesRouter(aTicket,url):
     header = {"X-Auth-Token":aTicket,"content-type":"application/json"}
     requestinterfaces=requests.get(url,data=None,headers=header,verify=False)
