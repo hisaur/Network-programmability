@@ -1,6 +1,8 @@
 from GetServiceTicket import *
 from tabulate import tabulate
 import threading,time
+from collections import defaultdict
+import sys
 def GetHosts(aTicket, url):
     header = {"X-Auth-Token":aTicket,"content-type":"application/json"}
     requesthosts = requests.get (url,headers=header,data=None,verify=False)
@@ -40,6 +42,8 @@ def PathTrace (aTicket, aSourse_IP, aDestinationIP, url):
     flowAnalisysID = response_json["response"] ["flowAnalysisId"]
     print (r.status_code)
     return flowAnalisysID
+def defaultvalue():
+    return "NONE"
 def Check_For_Response(aTicket, url,aFlowanalisysID):
     header = {"X-Auth-Token":aTicket,"content-type":"application/json"}
     r = requests.get (url, headers = header, verify = False)
@@ -49,6 +53,7 @@ def Check_For_Response(aTicket, url,aFlowanalisysID):
     while response_status != "COMPLETED":
         if response_status == "FAILED":
             print ("Path trace failed")
+            sys.exit
         else:
             r = requests.get (url, headers = header, verify = False)
             response_list = r.json()["response"]
@@ -58,28 +63,38 @@ def Check_For_Response(aTicket, url,aFlowanalisysID):
             count+=1
             if count >30:
                 print ("Connection error")
-                exit
+                sys.exit
     final_request = requests.get (url,headers = header, verify = False)
     path_trace_data = final_request.json() ["response"]
     list_of_data = []
     i=0
     path_trace_data_response = path_trace_data ["networkElementsInfo"]
-    print (path_trace_data_response[0]["egressInterface"]["physicalInterface"]["name"])
     for item in path_trace_data_response:
+        #try:
+        #    item ["egressInterface"]["physicalInterface"]= defaultdict(lambda:"NONE",item["egressInterface"]["physicalInterface"])
+        #except KeyError:
+        #    print ("Keyerror")
+        #try: 
+       #     item ["ingressInterface"]["physicalInterface"]= defaultdict(lambda:"NONE",item["ingressInterface"]["physicalInterface"])
+        #except KeyError:
+        #    print ("Keyerror")
         i+=1
-        try :
-            list_of_data.append([i,item ["name"], item["ip"], item["ingressInterface"]["physicalInterface"].get("name", "NO SUCH INTERFACE") , item["egressInterface"]["physicalInterface"].get("name","none")  ])
-        except KeyError:
-                list_of_data.append([i,item ["name"], item["ip"], item["egressInterface"]["physicalInterface"].get("name","none")  ])
-                list_of_data.append([i,item ["name"], item["ip"], item["ingressInterface"]["physicalInterface"].get("name", "NO SUCH INTERFACE")])
-                
-    print (list_of_data)
-    print (path_trace_data_response)
-    print (list_of_data)
+        
+        
+        if "egressInterface" in item and "ingressInterface" in item :
+                list_of_data.append ([i,item ["name"], item["ip"],item["ingressInterface"]["physicalInterface"]["name"],item["egressInterface"]["physicalInterface"]["name"]])
+        elif "egressInterface" in item and "ingressInterface" not in item:
+                list_of_data.append ([i,item ["name"], item["ip"],"NONE",item["egressInterface"]["physicalInterface"]["name"]])
+        elif "egressInterface" not in item and "ingressInterface" in item:
+                list_of_data.append ([i,item ["name"], item["ip"],item["ingressInterface"]["physicalInterface"]["name"],"NONE"])
+        elif "egressInterface" not in item and "ingressInterface" not in item:
+                list_of_data.append ([i,item ["name"], item["ip"],"NONE","NONE"])
+        
+        
     Sourse_IP = path_trace_data["request"]["sourceIP"]
     Dest_IP = path_trace_data["request"]["destIP"]
     print ("\n","Path Trace is completed. Sourse IP:", Sourse_IP, "Destination IP:", Dest_IP)
-    print (tabulate(list_of_data, headers=["name","ip","Egress Interface", "Ingress Interface"],tablefmt="rst"))
+    print (tabulate(list_of_data, headers=["name","ip","Ingress Interface", "Egress Interface"],tablefmt="rst"))
     return (path_trace_data)
   
         
