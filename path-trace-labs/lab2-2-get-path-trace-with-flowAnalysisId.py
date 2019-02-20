@@ -136,6 +136,8 @@ if __name__ == "__main__": # execute only if run as a script
     # path_data= {"sourceIP":s_ip,"destIP":d_ip,"periodicRefresh":False,"inclusions":["QOS-STATS","INTERFACE-STATS","DEVICE-STATS","PERFORMANCE-STATS","ACL-TRACE"]}
     # above JSON will trigger the respone to include stats of QoS, interface, device and ACL trace
     r = post(api="flow-analysis",data=path_data) # Execute POST /flow-analysis
+    print (r)
+    print (path_data)
     response_json = r.json()
     print ("Response from POST /flow-analysis:\n",json.dumps(response_json,indent=4))
     try:

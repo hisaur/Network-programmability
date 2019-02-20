@@ -7,6 +7,7 @@ def GetHosts(aTicket, url):
     hosts= requesthosts_json["response"]
     hosts_list = []
     i=0
+    print (hosts)
     for item in hosts:
         i+=1
         hosts_list.append ([i,item["hostIp"],item["hostMac"],item["hostType"],item["connectedNetworkDeviceIpAddress"],item["vlanId"]])
