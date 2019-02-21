@@ -70,17 +70,7 @@ def Check_For_Response(aTicket, url,aFlowanalisysID):
     i=0
     path_trace_data_response = path_trace_data ["networkElementsInfo"]
     for item in path_trace_data_response:
-        #try:
-        #    item ["egressInterface"]["physicalInterface"]= defaultdict(lambda:"NONE",item["egressInterface"]["physicalInterface"])
-        #except KeyError:
-        #    print ("Keyerror")
-        #try: 
-       #     item ["ingressInterface"]["physicalInterface"]= defaultdict(lambda:"NONE",item["ingressInterface"]["physicalInterface"])
-        #except KeyError:
-        #    print ("Keyerror")
-        i+=1
-        
-        
+        i+=1       
         if "egressInterface" in item and "ingressInterface" in item :
                 list_of_data.append ([i,item ["name"], item["ip"],item["ingressInterface"]["physicalInterface"]["name"],item["egressInterface"]["physicalInterface"]["name"]])
         elif "egressInterface" in item and "ingressInterface" not in item:
@@ -88,16 +78,13 @@ def Check_For_Response(aTicket, url,aFlowanalisysID):
         elif "egressInterface" not in item and "ingressInterface" in item:
                 list_of_data.append ([i,item ["name"], item["ip"],item["ingressInterface"]["physicalInterface"]["name"],"NONE"])
         elif "egressInterface" not in item and "ingressInterface" not in item:
-                list_of_data.append ([i,item ["name"], item["ip"],"NONE","NONE"])
-        
-        
+                list_of_data.append ([i,item ["name"], item["ip"],"NONE","NONE"])   
     Sourse_IP = path_trace_data["request"]["sourceIP"]
     Dest_IP = path_trace_data["request"]["destIP"]
     print ("\n","Path Trace is completed. Sourse IP:", Sourse_IP, "Destination IP:", Dest_IP)
+    print ("\n", "Path Trase Status: ",path_trace_data["detailedStatus"]["aclTraceCalculation"],"\n")
     print (tabulate(list_of_data, headers=["name","ip","Ingress Interface", "Egress Interface"],tablefmt="rst"))
-    return (path_trace_data)
-  
-        
+    return (path_trace_data)  
 def main():
     ticket = GetServiceTicket ()
     hosts = GetHosts(ticket,"https://"+ControllerIP+"/api/v1/host")
@@ -108,6 +95,4 @@ def main():
     Destination_IP = Select_Second_IP (numerallist)
     flowAnalisysID = PathTrace (ticket, Sourse_IP, Destination_IP,"https://"+ControllerIP+"/api/v1/flow-analysis")
     Check_For_Response (ticket,"https://"+ControllerIP+"/api/v1/flow-analysis"+"/"+flowAnalisysID,flowAnalisysID )
-
-
 main ()
