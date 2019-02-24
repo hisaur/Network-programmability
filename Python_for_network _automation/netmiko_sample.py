@@ -1,4 +1,5 @@
 from netmiko import ConnectHandler
+import netmiko
 from datetime import datetime
 def Get_IP_int_brief(IP_address,username,password,enable_secret):
     ssh_connection = ConnectHandler(
@@ -13,6 +14,8 @@ def Get_IP_int_brief(IP_address,username,password,enable_secret):
     result += ssh_connection.send_command("show ip int brief", delay_factor=2)
     ssh_connection.disconnect()
     return result
+
+
 def Ask_for_username_and_password():
     yes_or_no = input ("Are all username and passwords are the same? print 'yes' or 'no'")
     if yes_or_no == "yes":
@@ -25,18 +28,26 @@ def Ask_for_username_and_password():
         {"IP":"10.1.1.3","Username":username,"Password":password,"Enable_secret":enable_secret}
         ]    
         return intventory_list
-
 def main():
     inventory_list = Ask_for_username_and_password()
     i=0
     result_list = []
     time_on_start = datetime.now
-    for item in inventory_list:
-        print ("Processing the commands")
-        result= Get_IP_int_brief (item["IP"],item["Username"],item["Password"],item["Enable_secret"])
-        i+=1
-        print (i,"    ",result,"\n")
-    time_on_end = datetime.now
-    print ("Program was completed in: ",time_on_end-time_on_start)
+
+    
+    for attemts in range(1,3):
+        try:
+            for item in inventory_list:
+                print ("Processing the commands")
+                result= Get_IP_int_brief (item["IP"],item["Username"],item["Password"],item["Enable_secret"])
+                i+=1
+                print (i,"    ",result,"\n")
+        except netmiko.ssh_exception.NetMikoTimeoutException as error:
+            if attemts < 3:
+                print ("Connection Error")
+            else:
+                raise error
+            
+    
 main()
 
