@@ -32,7 +32,6 @@ def main():
     inventory_list = Ask_for_username_and_password()
     i=0
     result_list = []
-    time_on_start = datetime.now
 
     for item in inventory_list:
         try:

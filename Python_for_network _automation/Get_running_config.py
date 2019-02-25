@@ -32,6 +32,7 @@ def Ask_for_username_and_password():
         password = input ("Enter password ")
         enable_secret = input ("Enter enable_password ")
         intventory_list = [
+            # you must add here ip addresses of the devices int the following manner
         {"IP":"10.1.1.1","Username":username,"Password":password,"Enable_secret":enable_secret},
         {"IP":"10.1.1.2","Username":username,"Password":password,"Enable_secret":enable_secret},
         {"IP":"10.1.1.3","Username":username,"Password":password,"Enable_secret":enable_secret}
