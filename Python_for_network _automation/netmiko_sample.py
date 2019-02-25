@@ -34,19 +34,17 @@ def main():
     result_list = []
     time_on_start = datetime.now
 
-    
-    for attemts in range(1,3):
+    for item in inventory_list:
         try:
-            for item in inventory_list:
+            for attemts in range(1,3):
                 print ("Processing the commands")
                 result= Get_IP_int_brief (item["IP"],item["Username"],item["Password"],item["Enable_secret"])
                 i+=1
                 print (i,"    ",result,"\n")
-        except netmiko.ssh_exception.NetMikoTimeoutException as error:
+        except netmiko.ssh_exception.NetMikoTimeoutException:
             if attemts < 3:
                 print ("Connection Error")
-            else:
-                raise error
+            
             
     
 main()
