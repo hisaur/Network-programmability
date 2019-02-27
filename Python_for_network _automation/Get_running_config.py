@@ -35,7 +35,7 @@ def Ask_for_username_and_password():
         password = input ("Enter password ")
         enable_secret = input ("Enter enable_password ")
         intventory_list = [
-            # you must add here ip addresses of the devices int the following manner
+            # you must add here ip addresses of the devices in the following manner
         {"IP":"10.1.1.1","Username":username,"Password":password,"Enable_secret":enable_secret},
         {"IP":"10.1.1.2","Username":username,"Password":password,"Enable_secret":enable_secret},
         {"IP":"10.1.1.3","Username":username,"Password":password,"Enable_secret":enable_secret}
@@ -48,8 +48,10 @@ def Ask_for_username_and_password():
         {"IP":"10.1.1.2","Username":input("Username2"),"Password":input("password2"),"Enable_secret":input("Enable secret2")},
         {"IP":"10.1.1.3","Username":input("Username3"),"Password":input("password3"),"Enable_secret":input("Enable secret3")}
         ]  
+    
         print (intventory_list)  
         return intventory_list
+        #You cand hust hardcode Usernames and passwords, but i consider it insecure
 def main ():
     inventory_list = Ask_for_username_and_password()
     dirname = time.strftime("%d,%B,%Y")
@@ -80,13 +82,15 @@ def main ():
         token_string = token.decode()
         path = dirname
         path_create = os.path.join(path,name_of_the_file +".txt")
-        with open (path_create,"w+") as text_file:
+    # this code will save salt for each device in the separate file called salt_list.txt
+        with open (path_create,"a+") as text_file:
             text_file.write (token_string)
             text_file.close()
         salt_list.append ([name_of_the_file+".txt","Salt: ",salt])
-        path_create_salt = os.path.join(path,"salt_list" +".txt")
-        with open (path_create_salt+time.strftime("%d,%B,%Y"),"w+") as text_file:
+        path_create_salt = os.path.join(path,"salt_list" )
+        with open (path_create_salt+time.strftime("%d,%B,%Y")+".txt","a+") as text_file:
             for item in salt_list:
                 text_file.write (str(item))
                 text_file.close()
+        print ("Please keep secure your password and Salt list, which you can find in the directory")
 main()
