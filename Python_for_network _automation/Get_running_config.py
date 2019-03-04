@@ -8,7 +8,11 @@ import base64
 import time
 import hashlib
 import json
-# This small sccripts get running config from devices and creates encrypted fyles from this configs
+#This script was developed by Toktosunov Alexandr. 
+# Use this code as much as you want.
+#If you found this code useful, please give me recomendation or endorsment on LinkedIn:
+#  https://www.linkedin.com/in/aleksandr-toktosunov-b76577151/
+# This small script get running config from devices and creates encrypted fyles from this configs
 # You can Read files with script READ_Ecncrypted_config_from_file.py
 # this function gets running config
 def Get_running_config(IP_address,username,password,enable_secret):
@@ -51,14 +55,15 @@ def Ask_for_username_and_password():
     
         print (intventory_list)  
         return intventory_list
-        #You cand hust hardcode Usernames and passwords, but i consider it insecure
+        #You cand just hardcode Usernames and passwords, but i consider it insecure
+        #in oreder to do this just remove if and elif statements
 def main ():
     inventory_list = Ask_for_username_and_password()
     dirname = time.strftime("%d,%B,%Y")
     try:
         os.mkdir(dirname)
     except FileExistsError:
-        print ("exist")
+        print ("directory with this name already exist")
     for item in inventory_list:
         running_config = Get_running_config (item["IP"],item["Username"],item["Password"],item["Enable_secret"])
     #Encryption part

@@ -11,6 +11,10 @@ import base64
 import os
 import binascii
 import codecs
+#This script was developed by Toktosunov Alexandr. 
+# Use this code as much as you want.
+#If you found this code useful, please give me recomendation or endorsment on LinkedIn:
+#  https://www.linkedin.com/in/aleksandr-toktosunov-b76577151/
 # Path of the backup's folder
 def Select_directory():
     directory_list = []
@@ -99,6 +103,9 @@ def main():
     print (token_string)
     #this peace of code helps to restore configuration, but on cisco routers and swirtches with previous configuration this will lead to 
     #merge in currunt config and backup config
+"""
+Under construction!
+
     User_input_restore = input("Do you want to restore configs?(Beware backup will be merged with current config![No]): ")
     if User_input_restore == "Yes" or User_input_restore == "yes":
         username = input("Enter username: ")
@@ -112,4 +119,5 @@ def main():
     else:
         sys.exit()
 main()
+ """
     
